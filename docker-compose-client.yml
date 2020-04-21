@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+
+  speedtest:
+    restart: always
+    container_name: speedtest
+    build: ./docker/speedtest
+    environment:
+      - "SPEEDTEST_INTERVAL=${SPEEDTEST_SPEEDTEST_INTERVAL}"
+      - "SPEEDTEST_HOST=${SPEEDTEST_HOST}"
+      - "SPEEDTEST_NETWORK_TYPE=${SPEEDTEST_NETWORK_TYPE}"
+      - "SPEEDTEST_NETWORK_NAME=${SPEEDTEST_NETWORK_NAME}"
+      - "INFLUXDB_HOST=${INFLUXDB_HOST}"

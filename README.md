@@ -31,19 +31,20 @@ You can make use of the following environment variables / configurations:
 
 | Environment variable | Default value | Description
 |----------------------|---------------|------------|
-| `GRAFANA_PORT` | `3000` | Port to bind Grafana webinterface on the host system |
-| `SPEEDTEST_SPEEDTEST_INTERVAL` | `3600` | Interval/pause (in seconds) between speedtests |
-| `SPEEDTEST_HOST` | `local` | Display name of the client |
-| `INFLUXDB_DB` | `speedtest` | Database to save speedtest results |
+| `GRAFANA_PORT` | `3000` | Port to bind Grafana web interface on the host system |
+| `INFLUXDB_DB` | `speedtest` | Database name to save speedtest results |
+| `INFLUXDB_HOST` | `influxdb` | Host of InfluxDB (Only used when running in client mode - see below) |
 | `INFLUXDB_PORT` | `8086` | Port of InfluxDB |
-| `INFLUXDB_URL` | `http://influxdb:8086` | URL of InfluxDB |
+| `SPEEDTEST_HOST` | `local` | Display name of the client |
+| `SPEEDTEST_NETWORK_NAME` | `not specified` | Name of the network this client was on during the test |
+| `SPEEDTEST_NETWORK_TYPE` | `not specified` | Type of network this client was on (e.g. Wired, Wireless) |
+| `SPEEDTEST_SPEEDTEST_INTERVAL` | `3600` | Interval/pause (in seconds) between speedtests |
 
 ## Usage
 
 ### Services
 
 #### Start/create services
-
 
 ```shell
 $ docker-compose up -d
@@ -59,6 +60,15 @@ $ docker-compose stop
 Stopping speedtest_influxdb_1  ... done
 Stopping speedtest_grafana_1   ... done
 Stopping speedtest_speedtest_1 ... done
+```
+
+#### Start services in client mode
+
+By default, Grafana, Influx and Speedtest will all be started. In some cases, you may want to have a single database and store results from multiple clients. In this case, you should run the container in client mode, which basically just runs the speedtest service and uses the ${INFLUXDB_HOST} as a remote data store.
+
+```shell
+$ docker-compose -f docker-compose-client.yml up -d
+Creating speedtest_speedtest_1 ... done
 ```
 
 #### Upgrade services
@@ -128,7 +138,7 @@ git push origin feature/my-new-feature
 
 ## Version
 
-1.0.0
+1.1.0
 
 ## License
 
