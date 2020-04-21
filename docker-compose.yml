@@ -1,9 +1,11 @@
-version: '2'
+version: '3.7'
 
 services:
   influxdb:
     restart: always
     image: influxdb:1.5
+    ports:
+      - "8086:8086"
     container_name: influxdb
     volumes:
       - "./data/influxdb/:/var/lib/influxdb"
@@ -34,5 +36,7 @@ services:
     environment:
       - "SPEEDTEST_INTERVAL=${SPEEDTEST_SPEEDTEST_INTERVAL}"
       - "SPEEDTEST_HOST=${SPEEDTEST_HOST}"
+      - "SPEEDTEST_NETWORK_TYPE=${SPEEDTEST_NETWORK_TYPE}"
+      - "SPEEDTEST_NETWORK_NAME=${SPEEDTEST_NETWORK_NAME}"
     depends_on:
       - influxdb

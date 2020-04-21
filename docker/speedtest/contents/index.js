@@ -25,7 +25,7 @@ const getSpeedMetrics = async () => {
 const pushToInflux = async (influx, metrics) => {
   const points = Object.entries(metrics).map(([measurement, value]) => ({
     measurement,
-    tags: { host: process.env.SPEEDTEST_HOST },
+    tags: { host: process.env.SPEEDTEST_HOST, network_type: process.env.SPEEDTEST_NETWORK_TYPE, network_name: process.env.SPEEDTEST_NETWORK_NAME },
     fields: { value }
   }));
 
