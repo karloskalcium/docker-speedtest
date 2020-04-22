@@ -39,6 +39,7 @@ You can make use of the following environment variables / configurations:
 | `SPEEDTEST_NETWORK_NAME` | `not specified` | Name of the network this client was on during the test |
 | `SPEEDTEST_NETWORK_TYPE` | `not specified` | Type of network this client was on (e.g. Wired, Wireless) |
 | `SPEEDTEST_SPEEDTEST_INTERVAL` | `3600` | Interval/pause (in seconds) between speedtests |
+| `TZ` | `not set` | Timezone your computer is in |
 
 ## Usage
 
@@ -67,7 +68,7 @@ Stopping speedtest_speedtest_1 ... done
 By default, Grafana, Influx and Speedtest will all be started. In some cases, you may want to have a single database and store results from multiple clients. In this case, you should run the container in client mode, which basically just runs the speedtest service and uses the ${INFLUXDB_HOST} as a remote data store.
 
 ```shell
-$ docker-compose -f docker-compose-client.yml up -d
+$ ./start-client.sh
 Creating speedtest_speedtest_1 ... done
 ```
 

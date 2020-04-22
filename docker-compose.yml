@@ -38,5 +38,6 @@ services:
       - "SPEEDTEST_HOST=${SPEEDTEST_HOST}"
       - "SPEEDTEST_NETWORK_TYPE=${SPEEDTEST_NETWORK_TYPE}"
       - "SPEEDTEST_NETWORK_NAME=${SPEEDTEST_NETWORK_NAME}"
+      - "TZ=${TZ}"
     depends_on:
       - influxdb

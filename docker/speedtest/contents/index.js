@@ -5,27 +5,42 @@ const delay = require("delay");
 const bitToMbps = bit => (bit / 1000 / 1000) * 8;
 
 const log = (message, severity = "Info") =>
-  console.log(`[${severity.toUpperCase()}][${new Date()}] ${message}`);
+  console.log(`[${severity.toUpperCase()}][${new Date().toLocaleString()}] ${message}`);
 
 const getSpeedMetrics = async () => {
-  const { stdout } = await execa("speedtest", [
+
+  const subprocess = execa("speedtest", [
     "--accept-license",
     "--accept-gdpr",
     "-f",
     "json"
-  ]);
-  const result = JSON.parse(stdout);
-  return {
-    upload: bitToMbps(result.upload.bandwidth),
-    download: bitToMbps(result.download.bandwidth),
-    ping: result.ping.latency
-  };
+  ], { timeout: 60000});
+
+  try {
+    const { stdout } = await subprocess;
+    const result = JSON.parse(stdout);
+    return {
+      upload: bitToMbps(result.upload.bandwidth),
+      download: bitToMbps(result.download.bandwidth),
+      ping: result.ping.latency
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      upload: bitToMbps(0),
+      download: bitToMbps(0),
+      ping: 0
+    }
+  }
 };
 
 const pushToInflux = async (influx, metrics) => {
   const points = Object.entries(metrics).map(([measurement, value]) => ({
     measurement,
-    tags: { host: process.env.SPEEDTEST_HOST, network_type: process.env.SPEEDTEST_NETWORK_TYPE, network_name: process.env.SPEEDTEST_NETWORK_NAME },
+    tags: {
+      host: process.env.SPEEDTEST_HOST,
+      network_type: process.env.SPEEDTEST_NETWORK_TYPE,
+      network_name: process.env.SPEEDTEST_NETWORK_NAME },
     fields: { value }
   }));
 
